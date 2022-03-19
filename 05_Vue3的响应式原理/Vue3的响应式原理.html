@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <script>
+    // 源数据
+    let person = {
+      name: '张三',
+      age: 12,
+    }
+
+    // Vue2 模拟实现响应（只能捕获读取和修改，删除和新增无法触发）
+    /*     let p = {}
+        Object.keys(person).forEach((k) => {
+          Object.defineProperty(p, k, {
+            get() {
+              console.log(`${k} 属性被读取了`);
+              return person[k];
+            },
+            set(val) {
+              console.log(`${k} 属性被修改了`);
+              person[k] = val;
+            }
+          })
+        }) */
+
+    // Vue3 模拟实现响应式
+    const p = new Proxy(person, {
+      // 接收到两个参数 target 就是 person对象，prop 属性
+      // 读取属性调用
+      get(target, prop) {
+        console.log(`${prop} 属性被读取了`);
+        // return target[prop];
+        return Reflect.get(target, prop);
+      },
+      // 修改或新增属性调用
+      set(target, prop, val) {
+        console.log(`${prop} 属性被修改了`);
+        // target[prop] = val;
+        Reflect.set(target, prop, val);
+      },
+      // 删除属性调用
+      deleteProperty(target, prop) {
+        console.log(`${prop} 属性被删除了`);
+        // return delete target[prop];
+        return Reflect.deleteProperty(target, prop);
+      }
+    })
+
+    // 
+    let obj = { a: 1, b: 99 };
+    // 1. 使用 . 读取对象中的属性
+    console.log(obj.a);
+    // 2. 使用反射对象 Refelect 读取对象中的属性
+    console.log(Reflect.get(obj, 'a'));
+    // 同理，修改，删除，新增
+    Reflect.set(obj, 'a', 101)
+    Reflect.deleteProperty(obj, 'b');
+    Reflect.set(obj, 'c', 'tx')
+
+    console.log(obj);
+  </script>
+</body>
+
+</html>
