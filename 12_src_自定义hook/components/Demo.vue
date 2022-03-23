@@ -27,7 +27,6 @@ export default {
       point.y = e.pageY;
 			console.log(point.x, point.y);
     }
-
     // 挂载后绑定方法
     onMounted(() => {
       window.addEventListener("click", savePoint);
@@ -36,10 +35,8 @@ export default {
     onBeforeUnmount(() => {
       window.removeEventListener("click", savePoint);
     }); */
-
     // 2. 使用 hooks（将数据、方法、逻辑都封装到一个函数中，便于复用）
     const point = usePoint();
-
     return {
       sum,
       point,
